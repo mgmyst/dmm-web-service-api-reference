@@ -1,0 +1,1543 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "DMM Webサービス APIリファレンス",
+    "description": "DMM WebサービスはDMMが保有するデータベースを外部から利用するためのWeb APIを提供するサービスです。このドキュメントはDMMが提供してるAPIリファレンスをOpenAPIの様式でリライトした非公式のものとなります。利用は自己責任にてお願いします。公式:https://affiliate.dmm.com/api/",
+    "version": "3.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.dmm.com/affiliate/v3"
+    }
+  ],
+  "paths": {
+    "/ItemList": {
+      "get": {
+        "summary": "商品情報API",
+        "parameters": [
+          {
+            "name": "api_id",
+            "in": "query",
+            "required": true,
+            "description": "登録時に割り振られたAPI ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "affiliate_id",
+            "in": "query",
+            "required": true,
+            "description": "登録時に割り振られたアフィリエイトID（990～999）",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "site",
+            "in": "query",
+            "required": true,
+            "description": "サイトの種類（'FANZA' または 'DMM'）",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "service",
+            "in": "query",
+            "required": false,
+            "description": "サービスコードを指定",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "floor",
+            "in": "query",
+            "required": false,
+            "description": "フロアコードを指定",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hits",
+            "in": "query",
+            "required": false,
+            "description": "取得件数（初期値：20、最大：100）",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "description": "検索開始位置（初期値：1、最大：50000）",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "ソート順（'rank', 'price', '-price', 'date', 'review', 'match'）",
+            "schema": {
+              "type": "string",
+              "enum": ["rank", "price", "-price", "date", "review", "match"]
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "description": "検索キーワード（UTF-8）",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cid",
+            "in": "query",
+            "required": false,
+            "description": "商品ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "article",
+            "in": "query",
+            "required": false,
+            "description": "絞り込み項目（'actress', 'author', 'genre', 'series', 'maker'）",
+            "schema": {
+              "type": "string",
+              "enum": ["actress", "author", "genre", "series", "maker"]
+            }
+          },
+          {
+            "name": "article_id",
+            "in": "query",
+            "required": false,
+            "description": "絞り込みID（各検索APIから取得可能）",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gte_date",
+            "in": "query",
+            "required": false,
+            "description": "発売日絞り込み（ISO8601形式）",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "lte_date",
+            "in": "query",
+            "required": false,
+            "description": "発売日絞り込み（ISO8601形式）",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "mono_stock",
+            "in": "query",
+            "required": false,
+            "description": "在庫絞り込み",
+            "schema": {
+              "type": "string",
+              "enum": ["stock", "reserve", "reserve_empty", "mono", "mono_empty"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "商品情報の取得に成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "result": {
+                    "status": "success",
+                    "message": "OK"
+                  },
+                  "items": [
+                    {
+                      "service": "FANZA",
+                      "floor": "videoa",
+                      "id": "abc123",
+                      "title": "サンプル商品",
+                      "volume": "10MB",
+                      "price": 1000,
+                      "URL": "https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=abc123",
+                      "imageURL": "https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=abc123/medias/",
+                      "date": "2023-09-06T12:00:00Z",
+                      "maker": "DMM.com",
+                      "label": "sample",
+                      "genre": "Sample Genre",
+                      "actress": "Sample Actress",
+                      "series": "Sample Series",
+                      "author": "Sample Author"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "クエリーパラメータが不正"
+          },
+          "401": {
+            "description": "認証エラー"
+          },
+          "500": {
+            "description": "サーバーエラー"
+          }
+        }
+      }
+    },
+    "/FloorList": {
+      "get": {
+        "summary": "フロア検索API",
+        "parameters": [
+          {
+            "name": "api_id",
+            "in": "query",
+            "required": true,
+            "description": "登録時に割り振られたAPI ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "affiliate_id",
+            "in": "query",
+            "required": true,
+            "description": "登録時に割り振られたアフィリエイトID（990～999）",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "output",
+            "in": "query",
+            "required": false,
+            "description": "出力形式（jsonまたはxml）",
+            "schema": {
+              "type": "string",
+              "enum": ["json", "xml"]
+            }
+          },
+          {
+            "name": "callback",
+            "in": "query",
+            "required": false,
+            "description": "コールバック関数名（JSONP出力の場合に使用）",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "フロア情報の取得に成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "request": {
+                    "parameters": {
+                      "api_id": "example",
+                      "affiliate_id": "affiliate-990",
+                      "output": "json",
+                      "callback": "example"
+                    }
+                  },
+                  "result": {
+                    "site": [
+                      {
+                        "name": "DMM.com（一般）",
+                        "code": "DMM.com",
+                        "service": [
+                          {
+                            "name": "AKB48グループ",
+                            "code": "lod",
+                            "floor": [
+                              {
+                                "id": "1",
+                                "name": "AKB48",
+                                "code": "akb48"
+                              },
+                              {
+                                "id": "2",
+                                "name": "SKE48",
+                                "code": "ske48"
+                              },
+                              {
+                                "id": "3",
+                                "name": "NMB48",
+                                "code": "nmb48"
+                              },
+                              {
+                                "id": "4",
+                                "name": "HKT48",
+                                "code": "hkt48"
+                              },
+                              {
+                                "id": "5",
+                                "name": "NGT48",
+                                "code": "ngt48"
+                              },
+                              {
+                                "id": "6",
+                                "name": "REVIVAL!! ON DEMAND",
+                                "code": "rod"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "DMMブックス",
+                            "code": "ebook",
+                            "floor": [
+                              {
+                                "id": "19",
+                                "name": "コミック",
+                                "code": "comic"
+                              },
+                              {
+                                "id": "20",
+                                "name": "写真集",
+                                "code": "photo"
+                              },
+                              {
+                                "id": "21",
+                                "name": "文芸・ラノベ",
+                                "code": "novel"
+                              },
+                              {
+                                "id": "22",
+                                "name": "ビジネス・実用",
+                                "code": "otherbooks"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "PCゲーム/ソフトウェア",
+                            "code": "pcsoft",
+                            "floor": [
+                              {
+                                "id": "23",
+                                "name": "PCゲーム",
+                                "code": "digital_pcgame"
+                              },
+                              {
+                                "id": "24",
+                                "name": "ソフトウェア",
+                                "code": "digital_pcsoft"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "通販",
+                            "code": "mono",
+                            "floor": [
+                              {
+                                "id": "25",
+                                "name": "DVD・Blu-ray",
+                                "code": "dvd"
+                              },
+                              {
+                                "id": "26",
+                                "name": "CD",
+                                "code": "cd"
+                              },
+                              {
+                                "id": "27",
+                                "name": "本・コミック",
+                                "code": "book"
+                              },
+                              {
+                                "id": "28",
+                                "name": "ゲーム",
+                                "code": "game"
+                              },
+                              {
+                                "id": "29",
+                                "name": "ホビー",
+                                "code": "hobby"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "DVD/CDレンタル",
+                            "code": "rental",
+                            "floor": [
+                              {
+                                "id": "33",
+                                "name": "月額DVDレンタル",
+                                "code": "rental_dvd"
+                              },
+                              {
+                                "id": "34",
+                                "name": "月額CDレンタル",
+                                "code": "rental_cd"
+                              },
+                              {
+                                "id": "35",
+                                "name": "単品DVDレンタル",
+                                "code": "ppr_dvd"
+                              },
+                              {
+                                "id": "36",
+                                "name": "単品CDレンタル",
+                                "code": "ppr_cd"
+                              },
+                              {
+                                "id": "39",
+                                "name": "コミック",
+                                "code": "rental_comic"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "DMMTV",
+                            "code": "dmmtv",
+                            "floor": [
+                              {
+                                "id": "95",
+                                "name": "DMMTV舞台",
+                                "code": "dmmtv_video"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "FANZA（アダルト）",
+                        "code": "FANZA",
+                        "service": [
+                          {
+                            "name": "動画",
+                            "code": "digital",
+                            "floor": [
+                              {
+                                "id": "43",
+                                "name": "ビデオ",
+                                "code": "videoa"
+                              },
+                              {
+                                "id": "44",
+                                "name": "素人",
+                                "code": "videoc"
+                              },
+                              {
+                                "id": "45",
+                                "name": "成人映画",
+                                "code": "nikkatsu"
+                              },
+                              {
+                                "id": "46",
+                                "name": "アニメ動画",
+                                "code": "anime"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "月額動画",
+                            "code": "monthly",
+                            "floor": [
+                              {
+                                "id": "47",
+                                "name": "プレイガール ch.",
+                                "code": "playgirl"
+                              },
+                              {
+                                "id": "48",
+                                "name": "AVステーション",
+                                "code": "avstation"
+                              },
+                              {
+                                "id": "49",
+                                "name": "ドリームチャンネル",
+                                "code": "dream"
+                              },
+                              {
+                                "id": "50",
+                                "name": "エスワン ナンバーワンスタイル ch",
+                                "code": "s1"
+                              },
+                              {
+                                "id": "51",
+                                "name": "MOODYZチャンネル",
+                                "code": "moodyz"
+                              },
+                              {
+                                "id": "52",
+                                "name": "ソフト・オン・デマンド ch",
+                                "code": "sod"
+                              },
+                              {
+                                "id": "54",
+                                "name": "KMP チャンネル",
+                                "code": "kmp"
+                              },
+                              {
+                                "id": "55",
+                                "name": "桃太郎BB",
+                                "code": "momotaroubb"
+                              },
+                              {
+                                "id": "56",
+                                "name": "アリスJAPAN ch",
+                                "code": "alice"
+                              },
+                              {
+                                "id": "60",
+                                "name": "熟女チャンネル",
+                                "code": "jukujo"
+                              },
+                              {
+                                "id": "61",
+                                "name": "マニア ch",
+                                "code": "mania"
+                              },
+                              {
+                                "id": "62",
+                                "name": "パラダイステレビ ch",
+                                "code": "paradisetv"
+                              },
+                              {
+                                "id": "63",
+                                "name": "素人ガールズコレクション",
+                                "code": "shirouto"
+                              },
+                              {
+                                "id": "64",
+                                "name": "ピンク映画 ch",
+                                "code": "nikkatsu"
+                              },
+                              {
+                                "id": "65",
+                                "name": "アダルトアニメチャンネル",
+                                "code": "animech"
+                              },
+                              {
+                                "id": "66",
+                                "name": "妄想族ch",
+                                "code": "mousouzoku"
+                              },
+                              {
+                                "id": "67",
+                                "name": "見放題ch ライト",
+                                "code": "prime"
+                              },
+                              {
+                                "id": "68",
+                                "name": "見放題ch デラックス",
+                                "code": "premium"
+                              },
+                              {
+                                "id": "87",
+                                "name": "HHHch",
+                                "code": "hhh"
+                              },
+                              {
+                                "id": "91",
+                                "name": "VRch",
+                                "code": "vr"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "DVDレンタル",
+                            "code": "rental",
+                            "floor": [
+                              {
+                                "id": "71",
+                                "name": "月額レンタル",
+                                "code": "rental_dvd"
+                              },
+                              {
+                                "id": "72",
+                                "name": "単品レンタル",
+                                "code": "ppr_dvd"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "通販",
+                            "code": "mono",
+                            "floor": [
+                              {
+                                "id": "74",
+                                "name": "DVD",
+                                "code": "dvd"
+                              },
+                              {
+                                "id": "75",
+                                "name": "大人のおもちゃ",
+                                "code": "goods"
+                              },
+                              {
+                                "id": "76",
+                                "name": "アニメ",
+                                "code": "anime"
+                              },
+                              {
+                                "id": "77",
+                                "name": "PCゲーム",
+                                "code": "pcgame"
+                              },
+                              {
+                                "id": "78",
+                                "name": "ブック",
+                                "code": "book"
+                              },
+                              {
+                                "id": "79",
+                                "name": "同人",
+                                "code": "doujin"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "アダルトPCゲーム",
+                            "code": "pcgame",
+                            "floor": [
+                              {
+                                "id": "80",
+                                "name": "アダルトPCゲーム",
+                                "code": "digital_pcgame"
+                              },
+                              {
+                                "id": "89",
+                                "name": "音楽",
+                                "code": "pcgame_music"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "同人",
+                            "code": "doujin",
+                            "floor": [
+                              {
+                                "id": "81",
+                                "name": "同人",
+                                "code": "digital_doujin"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "FANZAブックス",
+                            "code": "ebook",
+                            "floor": [
+                              {
+                                "id": "82",
+                                "name": "コミック",
+                                "code": "comic"
+                              },
+                              {
+                                "id": "83",
+                                "name": "美少女ノベル・官能小説",
+                                "code": "novel"
+                              },
+                              {
+                                "id": "84",
+                                "name": "アダルト写真集・雑誌",
+                                "code": "photo"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "クエリーパラメータが不正"
+          },
+          "401": {
+            "description": "認証エラー"
+          },
+          "500": {
+            "description": "サーバーエラー"
+          }
+        }
+      }
+    },
+    "/ActressSearch": {
+      "get": {
+        "summary": "女優検索API",
+        "parameters": [
+          {
+            "name": "api_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "登録時に割り振られたID"
+          },
+          {
+            "name": "affiliate_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "登録時に割り振られた990～999までのアフィリエイトID"
+          },
+          {
+            "name": "initial",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "50音をUTF-8で指定"
+          },
+          {
+            "name": "actress_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "女優ID"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "UTF-8で指定されたキーワード"
+          },
+          {
+            "name": "gte_bust",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "バストの最小値"
+          },
+          {
+            "name": "lte_bust",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "バストの最大値"
+          },
+          {
+            "name": "gte_waist",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ウエストの最小値"
+          },
+          {
+            "name": "lte_waist",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ウエストの最大値"
+          },
+          {
+            "name": "gte_hip",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ヒップの最小値"
+          },
+          {
+            "name": "lte_hip",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ヒップの最大値"
+          },
+          {
+            "name": "gte_height",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "身長の最小値"
+          },
+          {
+            "name": "lte_height",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "身長の最大値"
+          },
+          {
+            "name": "gte_birthday",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "yyyymmddの形式で指定された生年月日の最小値"
+          },
+          {
+            "name": "lte_birthday",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "yyyymmddの形式で指定された生年月日の最大値"
+          },
+          {
+            "name": "hits",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "取得件数（初期値：20、最大：100）"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "検索開始位置（初期値：1、最大：1000）"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "女優情報を返す",
+            "content": {
+              "application/json": {
+                "example": {
+                  "result": "ok",
+                  "actress": [
+                    {
+                      "id": "1",
+                      "name": "AIKA",
+                      "bust": 88,
+                      "waist": 59,
+                      "hip": 89,
+                      "height": 158,
+                      "birthday": "1990-11-25",
+                      "imageURL": "https://example.com/actress/aika.jpg"
+                    },
+                    {
+                      "id": "2",
+                      "name": "Sora Aoi",
+                      "bust": 90,
+                      "waist": 58,
+                      "hip": 85,
+                      "height": 155,
+                      "birthday": "1983-11-11",
+                      "imageURL": "https://example.com/actress/soraaoi.jpg"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/GenreSearch": {
+      "get": {
+        "summary": "ジャンル検索API",
+        "parameters": [
+          {
+            "name": "api_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "登録時に割り振られたID"
+          },
+          {
+            "name": "affiliate_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "登録時に割り振られた990～999までのアフィリエイトID"
+          },
+          {
+            "name": "floor_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "フロア検索APIから取得可能なフロアID"
+          },
+          {
+            "name": "initial",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "50音をUTF-8で指定"
+          },
+          {
+            "name": "hits",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "取得件数（初期値：100、最大：500）"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "検索開始位置（初期値：1）"
+          },
+          {
+            "name": "output",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "出力形式（json / xml）"
+          },
+          {
+            "name": "callback",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "出力形式がjsonの場合にコールバック関数名を指定してJSONP形式で出力"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ジャンル一覧を返す",
+            "content": {
+              "application/json": {
+                "example": {
+                  "request": {
+                    "parameters": {
+                      "api_id": "[APIID]",
+                      "affiliate_id": "[アフィリエイトID]",
+                      "floor_id": "25",
+                      "initial": "き",
+                      "hits": "10",
+                      "offset": "10",
+                      "output": "json"
+                    }
+                  },
+                  "result": {
+                    "status": "200",
+                    "result_count": 10,
+                    "total_count": "20",
+                    "first_position": 10,
+                    "site_name": "DMM.com（一般）",
+                    "site_code": "DMM.com",
+                    "service_name": "通販",
+                    "service_code": "mono",
+                    "floor_id": "25",
+                    "floor_name": "DVD・Blu-ray",
+                    "floor_code": "dvd",
+                    "genre": [
+                      {
+                        "genre_id": "73115",
+                        "name": "キャラクター",
+                        "ruby": "きゃらくたー",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fdvd%2F-%2Flist%2F%3D%2Farticle%3Dkeyword%2Fid%3D73115%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "genre_id": "78012",
+                        "name": "キャラクター",
+                        "ruby": "きゃらくたー",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fdvd%2F-%2Flist%2F%3D%2Farticle%3Dkeyword%2Fid%3D78012%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "genre_id": "138",
+                        "name": "キャンペーン対象商品",
+                        "ruby": "きゃんぺーんたいしょうしょうひん",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fdvd%2F-%2Flist%2F%3D%2Farticle%3Dkeyword%2Fid%3D138%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "genre_id": "73145",
+                        "name": "教育",
+                        "ruby": "きょういく",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fdvd%2F-%2Flist%2F%3D%2Farticle%3Dkeyword%2Fid%3D73145%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "genre_id": "66352",
+                        "name": "競泳・スクール水着",
+                        "ruby": "きょうえいすくーるみずぎ",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fdvd%2F-%2Flist%2F%3D%2Farticle%3Dkeyword%2Fid%3D66352%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "genre_id": "71142",
+                        "name": "近未来",
+                        "ruby": "きんみらい",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fdvd%2F-%2Flist%2F%3D%2Farticle%3Dkeyword%2Fid%3D71142%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "genre_id": "72138",
+                        "name": "近未来",
+                        "ruby": "きんみらい",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fdvd%2F-%2Flist%2F%3D%2Farticle%3Dkeyword%2Fid%3D72138%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "genre_id": "78038",
+                        "name": "近未来",
+                        "ruby": "きんみらい",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fdvd%2F-%2Flist%2F%3D%2Farticle%3Dkeyword%2Fid%3D78038%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "genre_id": "73130",
+                        "name": "近未来",
+                        "ruby": "きんみらい",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fdvd%2F-%2Flist%2F%3D%2Farticle%3Dkeyword%2Fid%3D73130%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "genre_id": "70027",
+                        "name": "近未来",
+                        "ruby": "きんみらい",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fdvd%2F-%2Flist%2F%3D%2Farticle%3Dkeyword%2Fid%3D70027%2F&af_id=affiliate-990&ch=api"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MakerSearch": {
+      "get": {
+        "summary": "メーカー検索API",
+        "parameters": [
+          {
+            "name": "api_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "登録時に割り振られたID"
+          },
+          {
+            "name": "affiliate_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "登録時に割り振られた990～999までのアフィリエイトID"
+          },
+          {
+            "name": "floor_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "フロア検索APIから取得可能なフロアID"
+          },
+          {
+            "name": "initial",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "50音をUTF-8で指定"
+          },
+          {
+            "name": "hits",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "取得件数（初期値：100、最大：500）"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "検索開始位置（初期値：1）"
+          },
+          {
+            "name": "output",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "出力形式（json / xml）"
+          },
+          {
+            "name": "callback",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "出力形式がjsonの場合にコールバック関数名を指定してJSONP形式で出力"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "メーカー一覧を返す",
+            "content": {
+              "application/json": {
+                "example": {
+                  "request": {
+                    "parameters": {
+                      "api_id": "example",
+                      "affiliate_id": "affiliate-990",
+                      "floor_id": "43",
+                      "hits": "10",
+                      "offset": "100",
+                      "output": "json"
+                    }
+                  },
+                  "result": {
+                    "status": "200",
+                    "result_count": 10,
+                    "total_count": "4409",
+                    "first_position": 100,
+                    "site_name": "FANZA（アダルト）",
+                    "site_code": "FANZA",
+                    "service_name": "動画",
+                    "service_code": "digital",
+                    "floor_id": "43",
+                    "floor_name": "ビデオ",
+                    "floor_code": "videoa",
+                    "maker": [
+                      {
+                        "maker_id": "4029",
+                        "name": "アップグレート",
+                        "ruby": "あっぷぐれーと",
+                        "list_url": "https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dmaker%2Fid%3D4029%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "maker_id": "30636",
+                        "name": "アップグレード",
+                        "ruby": "あっぷぐれーど",
+                        "list_url": "https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dmaker%2Fid%3D30636%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "maker_id": "4894",
+                        "name": "アップJ",
+                        "ruby": "あっぷじぇい",
+                        "list_url": "https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dmaker%2Fid%3D4894%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "maker_id": "45313",
+                        "name": "アップス",
+                        "ruby": "あっぷす",
+                        "list_url": "https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dmaker%2Fid%3D45313%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "maker_id": "46068",
+                        "name": "アップソン",
+                        "ruby": "あっぷそん",
+                        "list_url": "https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dmaker%2Fid%3D46068%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "maker_id": "4616",
+                        "name": "アップダウン",
+                        "ruby": "あっぷだうん",
+                        "list_url": "https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dmaker%2Fid%3D4616%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "maker_id": "1229",
+                        "name": "アップ ユーピー企画",
+                        "ruby": "あっぷゆーぴーきかく",
+                        "list_url": "https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dmaker%2Fid%3D1229%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "maker_id": "4709",
+                        "name": "アップル企画",
+                        "ruby": "あっぷるきかく",
+                        "list_url": "https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dmaker%2Fid%3D4709%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "maker_id": "45664",
+                        "name": "apple Club",
+                        "ruby": "あっぷるくらぶ",
+                        "list_url": "https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dmaker%2Fid%3D45664%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "maker_id": "5090",
+                        "name": "あっぷるぷる",
+                        "ruby": "あっぷるぷる",
+                        "list_url": "https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dmaker%2Fid%3D5090%2F&af_id=affiliate-990&ch=api"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SeriesSearch": {
+      "get": {
+        "summary": "シリーズ検索API",
+        "parameters": [
+          {
+            "name": "api_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "登録時に割り振られたID"
+          },
+          {
+            "name": "affiliate_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "登録時に割り振られた990～999までのアフィリエイトID"
+          },
+          {
+            "name": "floor_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "フロア検索APIから取得可能なフロアID"
+          },
+          {
+            "name": "initial",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "50音をUTF-8で指定"
+          },
+          {
+            "name": "hits",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "取得件数（初期値：100、最大：500）"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "検索開始位置（初期値：1）"
+          },
+          {
+            "name": "output",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "出力形式（json / xml）"
+          },
+          {
+            "name": "callback",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "出力形式がjsonの場合にコールバック関数名を指定してJSONP形式で出力"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "シリーズ一覧を返す",
+            "content": {
+              "application/json": {
+                "example": {
+                  "request": {
+                    "parameters": {
+                      "api_id": "example",
+                      "affiliate_id": "affiliate-990",
+                      "floor_id": "27",
+                      "hits": "10",
+                      "offset": "1",
+                      "output": "json"
+                    }
+                  },
+                  "result": {
+                    "status": "200",
+                    "result_count": 10,
+                    "total_count": "970",
+                    "first_position": 1,
+                    "site_name": "DMM.com（一般）",
+                    "site_code": "DMM.com",
+                    "service_name": "通販",
+                    "service_code": "mono",
+                    "floor_id": "27",
+                    "floor_name": "本・コミック",
+                    "floor_code": "book",
+                    "series": [
+                      {
+                        "series_id": "105331",
+                        "name": "おあいにくさま二ノ宮くん",
+                        "ruby": "おあいにくさまにのみやくん",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dseries%2Fid%3D105331%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "series_id": "112264",
+                        "name": "お家さん",
+                        "ruby": "おいえさん",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dseries%2Fid%3D112264%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "series_id": "115305",
+                        "name": "オイ！！オバさん",
+                        "ruby": "おいおばさん",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dseries%2Fid%3D115305%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "series_id": "105332",
+                        "name": "おいしい関係",
+                        "ruby": "おいしいかんけい",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dseries%2Fid%3D105332%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "series_id": "100864",
+                        "name": "おいしい銀座",
+                        "ruby": "おいしいぎんざ",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dseries%2Fid%3D100864%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "series_id": "110050",
+                        "name": "おいしいコーヒーのいれ方",
+                        "ruby": "おいしいこーひーのいれかた",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dseries%2Fid%3D110050%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "series_id": "112232",
+                        "name": "おいしい生活",
+                        "ruby": "おいしいせいかつ",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dseries%2Fid%3D112232%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "series_id": "112231",
+                        "name": "おいしいパン屋さん",
+                        "ruby": "おいしいぱんやさん",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dseries%2Fid%3D112231%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "series_id": "62647",
+                        "name": "おいしいプロポーズ",
+                        "ruby": "おいしいぷろぽーず",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dseries%2Fid%3D62647%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "series_id": "116147",
+                        "name": "おいしい学び夜",
+                        "ruby": "おいしいまなびや",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dseries%2Fid%3D116147%2F&af_id=affiliate-990&ch=api"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/AuthorSearch": {
+      "get": {
+        "summary": "作者検索API",
+        "parameters": [
+          {
+            "name": "api_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "登録時に割り振られたID"
+          },
+          {
+            "name": "affiliate_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "登録時に割り振られた990～999までのアフィリエイトID"
+          },
+          {
+            "name": "floor_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "フロア検索APIから取得可能なフロアID"
+          },
+          {
+            "name": "initial",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "50音をUTF-8で指定"
+          },
+          {
+            "name": "hits",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "取得件数（初期値：100、最大：500）"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "検索開始位置（初期値：1）"
+          },
+          {
+            "name": "output",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "出力形式（json / xml）"
+          },
+          {
+            "name": "callback",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "出力形式がjsonの場合にコールバック関数名を指定してJSONP形式で出力"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "作者一覧を返す",
+            "content": {
+              "application/json": {
+                "example": {
+                  "request": {
+                    "parameters": {
+                      "api_id": "example",
+                      "affiliate_id": "affiliate-990",
+                      "floor_id": "27",
+                      "initial": "う",
+                      "hits": "10",
+                      "output": "json"
+                    }
+                  },
+                  "result": {
+                    "status": "200",
+                    "result_count": 10,
+                    "total_count": "2311",
+                    "first_position": 1,
+                    "site_name": "DMM.com（一般）",
+                    "site_code": "DMM.com",
+                    "service_name": "通販",
+                    "service_code": "mono",
+                    "floor_id": "27",
+                    "floor_name": "本・コミック",
+                    "floor_code": "book",
+                    "author": [
+                      {
+                        "author_id": "182179",
+                        "name": "王青翔",
+                        "ruby": "うぁんちぃんしゃん",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dauthor%2Fid%3D182179%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "author_id": "108270",
+                        "name": "ウィクセル",
+                        "ruby": "うぃくせる",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dauthor%2Fid%3D108270%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "author_id": "108293",
+                        "name": "魏晶玄",
+                        "ruby": "うぃじょんひょん",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dauthor%2Fid%3D108293%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "author_id": "108295",
+                        "name": "ウィスット・ポンニミット",
+                        "ruby": "うぃすっとぽんにみっと",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dauthor%2Fid%3D108295%2F&af_id=affiliate-990&ch=api",
+                        "another_name": "W.ポンニミット"
+                      },
+                      {
+                        "author_id": "20085",
+                        "name": "WIZ",
+                        "ruby": "うぃず",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dauthor%2Fid%3D20085%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "author_id": "108309",
+                        "name": "ウィックスティード",
+                        "ruby": "うぃっくすてぃーど",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dauthor%2Fid%3D108309%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "author_id": "108314",
+                        "name": "ウィティ・イヒマエラ",
+                        "ruby": "うぃてぃいひまえら",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dauthor%2Fid%3D108314%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "author_id": "108316",
+                        "name": "ウィトゲンシュタイン",
+                        "ruby": "うぃとげんしゅたいん",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dauthor%2Fid%3D108316%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "author_id": "108322",
+                        "name": "ウィニコット",
+                        "ruby": "うぃにこっと",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dauthor%2Fid%3D108322%2F&af_id=affiliate-990&ch=api"
+                      },
+                      {
+                        "author_id": "108332",
+                        "name": "ウィラサクレック・ウォンパーサー",
+                        "ruby": "うぃらさくれっくうぉんぱーさー",
+                        "list_url": "https://al.dmm.com/?lurl=https%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dauthor%2Fid%3D108332%2F&af_id=affiliate-990&ch=api"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
