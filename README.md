@@ -1,7 +1,7 @@
 # DMM Webサービス APIリファレンス
 ## 概要
-DMM WebサービスはDMMが保有するデータベースを外部から利用するためのWeb APIを提供するサービスです。このリポジトリでは、DMMが提供してるAPIリファレンスをOpenAPIの様式でリライトしたものを公開しています。非公式のものであり、利用は自己責任にてお願いします。
-リファレンスは[こちら](api-reference.html)です。
+「DMM Webサービス」はDMMが保有するデータベースを外部から利用するためのWeb APIを提供するサービスです。このリポジトリでは、DMMが提供してるAPIリファレンスをOpenAPIの様式でリライトしたものを公開しています。非公式のものであり、利用は自己責任にてお願いします。
+リファレンスは[こちら](index.html)です。
 
 APIの正確な仕様が知りたい場合には[公式のリファレンス](https://affiliate.dmm.com/api/)を参照してください。
 
@@ -11,7 +11,8 @@ OpenAPIの仕様に則りjson形式で記述された`DMM Webサービス APIリ
 
 [api-reference.json](api-reference.json)
 
-### api-reference.html
-`api-reference.json`をもとに[Redoc](https://github.com/Redocly/redoc)で作成されたhtml版のリファレンスです。基本的にはこちらをご利用ください。
+### index.html
+`api-reference.json`をもとに[Redoc](https://github.com/Redocly/redoc)で作成されたhtml版のリファレンスです。
+[GithubPagesでホスト]()しています。
 
-[api-reference.html](api-reference.html)
+[index.html](index.html)
